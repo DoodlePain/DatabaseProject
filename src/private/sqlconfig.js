@@ -1,9 +1,9 @@
 import mysql from 'mysql';
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'banana',
-  database : 'Faceit'
+  host: 'localhost',
+  user: 'tuna',
+  password: 'banana',
+  database: 'Faceit'
 });
 
 connection.connect()

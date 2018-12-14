@@ -6,9 +6,6 @@ CREATE TABLE Server (
     tick int NOT NULL DEFAULT 128) 
 Engine=InnoDB;
 
-
-
-
 -- create table Utente
 CREATE TABLE Utente (
     id_utente int PRIMARY KEY auto_increment ,               
@@ -50,8 +47,8 @@ CREATE TABLE Sponsor (
 );
 
 -- create table Organizzatori
-CREATE TABLE Organizzatori (
-    id_sponsor int PRIMARY KEY auto_increment,
+CREATE TABLE Organizzatore (
+    id_organizzatore int PRIMARY KEY auto_increment,
     nome VARCHAR(100) NOT NULL,
     ambito VARCHAR(100) NOT NULL,
     societa VARCHAR(100) NOT NULL,
@@ -121,3 +118,95 @@ CREATE TABLE Partita (
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
     FK_Server int NOT NULL REFERENCES Server(ip) ON DELETE CASCADE,
 );
+
+-- create table Abbonamento
+CREATE TABLE Abbonamento (
+    id_abbonamento int PRIMARY KEY NOT NULL auto_increment,
+    durata int NOT NULL,
+    costo   real NOT NULL,
+    tipo VARCHAR(100) NOT NULL
+    );
+
+-- create table Torneto 
+create table Torneo (
+    id_torneo int not null primary key auto_increment,
+    slot int,
+    data_inizio date not null,
+    data_fine date not null,
+    FK_Organizzatore int NOT NULL REFERENCES Organizzatore(id_organizzatore) ON DELETE CASCADE,
+    FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
+    premio int default 0);
+
+-- Games rows
+insert into Gioco (nome,abbreviazione,piattaforma) values 
+    ('Dota 2','D2','Steam'),
+    ('Counter-Strike: Global Offensive','CS:GO','Steam'),
+    ('CS:GO Danger Zone','CS:DZ','Steam'),
+    ("PlayersUnknown's Battlegrounds",'PUBG','Steam'),
+    ('Rocket League','RL','Steam'),
+    ('Smite','Smite','HiRez'),
+    ('Team Fortress 2','TF2','Steam'),
+    ('Insidia','Insidia','Steam'),
+    ('Dirty Bomb','DB','Steam'),
+    ('World of tanks','WOT','Wargaming.net'),
+    ('League of Legends','LOL','RIOT'),
+    ('Nationa Hockey League','NLH','EASports'),
+    ('Overwatch','OW','Blizzard'),
+    ('Minion Masters','MM','Steam');
+
+
+-- Games maps
+insert into  Mappe (nome,numero_giocatori,modalita,FK_Gioco) values 
+('aquadome',6,'arena','RL'),
+('beckwith_park',6,'arena','RL'),
+('champions_field',6,'arena','RL'),
+('dfh_stadium',6,'arena','RL'),
+('mannfield',6,'arena','RL'),
+('neo_tokyo',6,'arena','RL'),
+('salty_shores',6,'arena','RL'),
+('starbase_arc',6,'arena','RL'),
+('urban_central',6,'arena','RL'),
+('Utopia_coliseum',6,'arena','RL'),
+('westeland',6,'arena','RL'),
+('standard_map',10,'arena','Insidia'),
+('de_dust2',10,'competitive','CS:GO'),
+('de_mirage',10,'competitive','CS:GO'),
+('de_cache',10,'competitive','CS:GO'),
+('de_train',10,'competitive','CS:GO'),
+('de_inferno',10,'competitive','CS:GO'),
+('de_nuke',10,'competitive','CS:GO'),
+('de_overpass',10,'competitive','CS:GO'),
+('classic_5_vs_5',10,'captains mode','D2'),
+('summoners_rift',10,'draft','LOL'),
+('olympus',10,'conquest','Smite'),
+('cp_badlands',12,'competitive','TF2'),
+('cp_granary_pro_rc4',12,'competitive','TF2'),
+('cp_gullywash_final1',12,'competitive','TF2'),
+('cp_metalworks',12,'competitive','TF2'),
+('cp_process_final',12,'competitive','TF2'),
+('cp_reckoner_b3a',12,'competitive','TF2'),
+('cp_snakewater_final1',12,'competitive','TF2'),
+('cp_sunshine_*',12,'competitive','TF2'),
+('koth_forge_b3',12,'competitive','TF2'),
+('koth_product_rc8',12,'competitive','TF2'),
+('dz_blacksite',16,'danger zone','CS:DZ')
+;
+
+-- Abbonamenti
+insert into Abbonamento (tipo,costo,durata) values 
+('CSGO',5.99,1),
+('CSGO',17.97,3),
+('CSGO',29.94,6),
+('CSGO',39.99,12),
+('PUBG',5.99,1),
+('PUBG',17.97,3),
+('PUBG',29.94,6),
+('PUBG',39.99,12),
+('D2',5.99,1),
+('D2',17.97,3),
+('D2',29.94,6),
+('D2',39.99,12),
+('premium',9.99,1),
+('premium',29.97,3),
+('premium',53.95,6),
+('premium',83.88,12);
