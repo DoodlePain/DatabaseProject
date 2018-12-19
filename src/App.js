@@ -171,7 +171,7 @@ export default class App extends Component {
 
         var repeatSponsor = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
+            axios.post('http://localhost:3001/Sponsor/insert', querystring.stringify({
                 nome: Faker.company.companyName(),
                 nazione: Faker.address.country(),
                 ambito: Faker.company.bs(),
@@ -189,14 +189,14 @@ export default class App extends Component {
 
         var repeatOrganizzatori = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
+            axios.post('http://localhost:3001/Organizzatori/insert', querystring.stringify({
                 nome: Faker.company.companyName(),
                 ambito: Faker.company.bs(),
                 societa: Faker.company.companyName() + " " + Faker.company.companySuffix(),
                 nazione: Faker.address.country(),
                 contatto: Faker.phone.phoneNumberFormat(),
-                verificato: Faker.random.boolean(),
-                FK_Utente: Math.floor(Math.random() * 17000) + 1
+                verificato: Faker.random.boolean() ? 1 : 0,
+                utente: Math.floor(Math.random() * 17000) + 1
             }))
                 .then((response) => {
                     index++
@@ -208,12 +208,13 @@ export default class App extends Component {
             repeatOrganizzatori(0)
         }
 
+
         var repeatStaff = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
+            axios.post('http://localhost:3001/Staff/insert', querystring.stringify({
                 ambito: Faker.random.arrayElement(['shop', 'in-game', 'web-site', 'server']),
                 ruolo: Faker.random.arrayElement(['admin', 'developer', 'moderator', 'supervisor']),
-                FK_Utente: Math.floor(Math.random() * 17000) + 1
+                utente: Math.floor(Math.random() * 17000) + 1
             }))
                 .then((response) => {
                     index++
@@ -227,9 +228,8 @@ export default class App extends Component {
 
         var repeatSquadra = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
+            axios.post('http://localhost:3001/Squadra/insert', querystring.stringify({
                 nome: Faker.random.words(),
-                FK_Componenti: Math.floor(Math.random() * 17000) + 1,
                 FK_Sponsor: Math.floor(Math.random() * 17000) + 1,
                 FK_Leader: Math.floor(Math.random() * 17000) + 1,
                 FK_Manager: Math.floor(Math.random() * 17000) + 1,
@@ -247,12 +247,16 @@ export default class App extends Component {
 
         var repeatComponenti = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
-                FK_Utente1: Math.floor(Math.random() * 17000) + 1,
-                FK_Utente2: Math.floor(Math.random() * 17000) + 1,
-                FK_Utente3: Math.floor(Math.random() * 17000) + 1,
-                FK_Utente4: Math.floor(Math.random() * 17000) + 1,
-                FK_Utente5: Math.floor(Math.random() * 17000) + 1
+            axios.post('http://localhost:3001/Componenti/insert', querystring.stringify({
+                utente1: Math.floor(Math.random() * 17000) + 1,
+                utente2: Math.floor(Math.random() * 17000) + 1,
+                utente3: Math.floor(Math.random() * 17000) + 1,
+                utente4: Math.floor(Math.random() * 17000) + 1,
+                utente5: Math.floor(Math.random() * 17000) + 1,
+                utente6: Math.floor(Math.random() * 17000) + 1,
+                utente7: Math.floor(Math.random() * 17000) + 1,
+                utente8: Math.floor(Math.random() * 17000) + 1,
+                FK_Squadra: Math.floor(Math.random() * 2000) + 1
             }))
                 .then((response) => {
                     index++
@@ -266,10 +270,13 @@ export default class App extends Component {
 
         var repeatPartita = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            axios.post('http://localhost:3001/Server/insert', querystring.stringify({
+            axios.post('http://localhost:3001/Partita/insert', querystring.stringify({
+                // data_inizo:,
+                // data_fine:,
                 FK_Squadra1: Math.floor(Math.random() * 17000) + 1,
                 FK_Squadra1: Math.floor(Math.random() * 17000) + 1,
-                FK_Server: Math.floor(Math.random() * 27000) + 1
+                FK_Server: Math.floor(Math.random() * 5000) + 1,
+                FK_Mappa: Math.floor(Math.random() * 33) + 1,
             }))
                 .then((response) => {
                     index++
@@ -280,6 +287,8 @@ export default class App extends Component {
         var partitaFiller = () => {
             repeatPartita(0)
         }
+
+
 
         var clearServerResult = () => {
             this.setState({
@@ -293,7 +302,7 @@ export default class App extends Component {
                 test: this.state.test
             }))
                 .then((response) => {
-                    console.log(response);
+                    console.log(response.data.data[0]);
                 })
         }
 
@@ -385,6 +394,46 @@ export default class App extends Component {
 
                 <Button variant="raised" color="primary" onClick={serverFiller}>
                     Gioco
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={staffFiller}>
+                    Staff
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={squadraFiller}>
+                    Squadra
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+
+                <br />
+                <Button variant="raised" color="primary" onClick={componentiFiller}>
+                    Componenti
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={partitaFiller}>
+                    Partita
                 </Button>
                 {/* <Button variant="raised" color="primary" onClick={deleteServer}>
                     Delete server

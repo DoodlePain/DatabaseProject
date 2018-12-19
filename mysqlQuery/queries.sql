@@ -1,9 +1,12 @@
 -- create table Server
 CREATE TABLE Server (
-    ip VARCHAR(15) PRIMARY KEY NOT NULL,
+    id_server int PRIMARY KEY auto_increment NOT NULL,
+    ip VARCHAR(15) NOT NULL,
     porta int NOT NULL,
     locazione VARCHAR(50) NOT NULL,
-    tick int NOT NULL DEFAULT 128) 
+    tick int NOT NULL DEFAULT 128,
+    primary key (id_server)
+    );
 Engine=InnoDB;
 
 -- create table Utente
@@ -60,21 +63,24 @@ CREATE TABLE Organizzatore (
 
 -- create table Gioco 
 CREATE TABLE Gioco (
-    nome VARCHAR(100) NOT NULL PRIMARY KEY,
-    piattaforma VARCHAR(100) NOT NULL
+    id_gioco int not null primary key auto_increment,
+    nome VARCHAR(100) NOT NULL,
+    piattaforma VARCHAR(100) NOT NULL,
+    abbreviazione VARCHAR(50) not null
 );
 
--- create table Mappe
-CREATE TABLE Mappe (
-    id_mappa int PRIMARY KEY NOT NULL,
+-- create table Mappa
+CREATE TABLE Mappa (
+    id_mappa int PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(100) NOT NULL,
     numero_giocatori int NOT NULL,
-    modalita VARCHAR(100) NOT NULL
+    modalita VARCHAR(100) NOT NULL,
+    FK_Gioco VARCHAR(100) not null references Gioco(id_gioco) on delete cascade
 );
 
 -- create table Staff
 CREATE TABLE Staff (
-    id_staff int PRIMARY KEY NOT NULL,
+    id_staff int PRIMARY KEY NOT NULL auto_increment,
     ambito VARCHAR(100) NOT NULL,
     ruolo VARCHAR(100) NOT NULL,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
@@ -82,7 +88,7 @@ CREATE TABLE Staff (
 
 -- create table Missioni
 CREATE TABLE Missioni (
-    id_missione int PRIMARY KEY NOT NULL,
+    id_missione int PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(100) NOT NULL,
     tipo VARCHAR(100) NOT NULL,
     scopo VARCHAR(100) NOT NULL,
@@ -92,31 +98,37 @@ CREATE TABLE Missioni (
 
 -- create table Squadra
 CREATE TABLE Squadra (
-    id_squadra int PRIMARY KEY NOT NULL,
+    id_squadra int PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(100) NOT NULL,
     FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
     FK_Leader int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
     FK_Manager int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Componenti int NOT NULL REFERENCES Componenti(id_party) ON DELETE CASCADE,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
 );
 
 -- create table Componenti
 CREATE TABLE Componenti (
-    id_componenti int PRIMARY KEY NOT NULL,
-    FK_Utente1 int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente2 int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente3 int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente4 int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente5 int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
+    id_componenti int PRIMARY KEY NOT NULL auto_increment,
+    FK_Utente1 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente2 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente3 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente4 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente5 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente6 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente7 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente8 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Squadra int  REFERENCES Squadra(id_squadra) ON DELETE CASCADE
 );
 
 -- create table Partita
 CREATE TABLE Partita (
-    id_partita int PRIMARY KEY NOT NULL,
+    id_partita int PRIMARY KEY NOT NULL auto_increment,
+    data_inizio date NOT NULL,
+    data_fine date NOT NULL,
     FK_Squadra1 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
-    FK_Server int NOT NULL REFERENCES Server(ip) ON DELETE CASCADE,
+    FK_Server int NOT NULL REFERENCES Server(id_server) ON DELETE CASCADE,
+    FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) ON DELETE CASCADE
 );
 
 -- create table Abbonamento
@@ -137,6 +149,22 @@ create table Torneo (
     FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
     premio int default 0);
 
+-- create table Sottoscrizione
+create table Sottoscrizione (
+    id_sottoscrizione int auto_increment not null primary key,
+    data_inizio date not null,
+    data_fine date not null,
+    FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Abbonamento int NOT NULL REFERENCES Abbonamento(id_abbonamento) ON DELETE CASCADE
+    ); 
+
+-- create table Iscrizione
+create table Iscrizione(
+    id_iscrizione int not null auto_increment primary key,
+    FK_Squadra int not null references Squadra(id_squadra) ,
+    FK_Torneo int not null references Torneo(id_torneo) 
+    );
+
 -- Games rows
 insert into Gioco (nome,abbreviazione,piattaforma) values 
     ('Dota 2','D2','Steam'),
@@ -155,8 +183,8 @@ insert into Gioco (nome,abbreviazione,piattaforma) values
     ('Minion Masters','MM','Steam');
 
 
--- Games maps
-insert into  Mappe (nome,numero_giocatori,modalita,FK_Gioco) values 
+
+insert into  Mappa (nome,numero_giocatori,modalita,FK_Gioco) values 
 ('aquadome',6,'arena','RL'),
 ('beckwith_park',6,'arena','RL'),
 ('champions_field',6,'arena','RL'),
