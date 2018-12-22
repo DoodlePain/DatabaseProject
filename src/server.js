@@ -24,7 +24,7 @@ app.get('/Server/count', (req, res) => {
     console.log("Query count request from " + req.headers['x-forwarded-for']);
 
     connection
-        .query('SELECT COUNT(id_server) AS length FROM Server;', function (error, results, fields) {
+        .query('SELECT COUNT(ip) AS length FROM Server;', function (error, results, fields) {
             if (error)
                 throw error;
             res.json({ response: results })
@@ -111,7 +111,7 @@ app.post('/Statistiche/insert', (req, res) => {
 
 app.post('/Partita/insert', (req, res) => {
     console.log("Random data insert into Partita table request");
-    var query1 = "insert into Partita (data_inizio,data_fine,FK_Squadra2,FK_Squadra2,FK_Mappa,FK_Server) VALUES (" + req.body.data_inizio + "," + req.body.data_fine + "," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + "," + req.body.FK_Server + ")"
+    var query1 = "insert into Partita (data,ora,FK_Squadra1,FK_Squadra2,FK_Mappa,FK_Server) VALUES ('" + req.body.data + "','" + req.body.ora + "'," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + ",'" + req.body.FK_Server + "')"
     connection
         .query(query1, function (error, results, fields) {
             if (error)
@@ -147,6 +147,18 @@ app.post('/Staff/insert', (req, res) => {
 app.post('/Organizzatori/insert', (req, res) => {
     console.log("Random data insert into Organizzatori table request");
     var query1 = "insert into Organizzatore (nome,ambito,societa,nazione,contatto,verificato,FK_Utente) VALUES (\"" + req.body.nome + "\",\"" + req.body.ambito + "\",\"" + req.body.societa + "\",\"" + req.body.nazione + "\",\"" + req.body.contatto + "\"," + req.body.verificato + "," + req.body.utente + ")"
+    console.log(query1);
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
+    res.json({ note: "Recorded" })
+})
+
+app.post('/Torneo/insert', (req, res) => {
+    console.log("Random data insert into Torneo table request");
+    var query1 = "insert into Torneo (nome,slot,data_inizio,data_fine,FK_Organizzatore,FK_Sponsor,premio) VALUES (\"" + req.body.nome + "\"," + req.body.slot + ", \"" + req.body.data_inizio + "\",\"" + req.body.data_fine + "\", " + req.body.FK_Organizzatore + "," + req.body.FK_Sponsor + "," + req.body.premio + ")";
     console.log(query1);
     connection
         .query(query1, function (error, results, fields) {
@@ -198,6 +210,52 @@ app.post('/Statistiche/getId', (req, res) => {
 
 
 })
+
+
+
+app.post('/Iscrizione/insert', (req, res) => {
+    console.log("Random data insert into Iscrizione table request");
+    var query1 = "INSERT INTO Iscrizione (FK_Squadra,FK_Torneo) VALUES  (" + req.body.FK_Squadra + ", " + req.body.FK_Torneo + ")"
+    console.log(req.body);
+
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
+    res.json({ note: "Recorded" })
+})
+
+
+
+app.post('/Sottoscrizione/insert', (req, res) => {
+    console.log("Random data insert into Sottoscrizione table request");
+    var query1 = "INSERT INTO Sottoscrizione (data_inizio,data_fine,FK_Utente,FK_Abbonamento) VALUES  (\"" + req.body.data_inizio + "\",\"" + req.body.data_fine + "\"," + req.body.FK_Utente + "," + req.body.FK_Abbonamento + ")"
+    console.log(req.body);
+
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
+    res.json({ note: "Recorded" })
+})
+
+
+
+app.post('/Missione/insert', (req, res) => {
+    console.log("Random data insert into Missione table request");
+    var query1 = "INSERT INTO Missione (ip,locazione,porta,tick) VALUES  (\"" + req.body.ip + "\",\"" + req.body.locazione + "\"," + req.body.porta + "," + req.body.tick + ")"
+    console.log(req.body);
+
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
+    res.json({ note: "Recorded" })
+})
+
 
 app.listen(3001, () => {
     console.log('Listening on http://localhost:3001 ...');

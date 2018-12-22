@@ -8,6 +8,13 @@ CREATE TABLE Server (
     primary key (id_server)
     );
 Engine=InnoDB;
+CREATE TABLE Server (
+    ip VARCHAR(15) NOT NULL,
+    porta varchar(4) NOT NULL,
+    locazione VARCHAR(50) NOT NULL,
+    tick int NOT NULL DEFAULT 128,
+    primary key (ip,porta)
+    );
 
 -- create table Utente
 CREATE TABLE Utente (
@@ -123,11 +130,11 @@ CREATE TABLE Componenti (
 -- create table Partita
 CREATE TABLE Partita (
     id_partita int PRIMARY KEY NOT NULL auto_increment,
-    data_inizio date NOT NULL,
-    data_fine date NOT NULL,
+    data date NOT NULL,
+    ora VARCHAR(50) NOT NULL,
     FK_Squadra1 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
-    FK_Server int NOT NULL REFERENCES Server(id_server) ON DELETE CASCADE,
+    FK_Server string NOT NULL REFERENCES Server(id_server) ON DELETE CASCADE,
     FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) ON DELETE CASCADE
 );
 
@@ -139,9 +146,10 @@ CREATE TABLE Abbonamento (
     tipo VARCHAR(100) NOT NULL
     );
 
--- create table Torneto 
+-- create table Torneo 
 create table Torneo (
     id_torneo int not null primary key auto_increment,
+    nome varchar(100) not null,
     slot int,
     data_inizio date not null,
     data_fine date not null,

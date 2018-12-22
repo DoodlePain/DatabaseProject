@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import Faker from 'faker'
 import TextField from '@material-ui/core/TextField';
+import ServerData from './ServerData.json'
 var querystring = require('querystring');
 
 
@@ -226,6 +227,28 @@ export default class App extends Component {
             repeatStaff(0)
         }
 
+        var repeatTorneo = (index) => {
+            if (index === parseInt(this.state.limitServerRecords)) return 1
+            var datai = "201" + (Math.floor(Math.random() * 6) + 1) + "-" + (Math.floor(Math.random() * 12) + 1) + "-" + (Math.floor(Math.random() * 30) + 1)
+            axios.post('http://localhost:3001/Torneo/insert', querystring.stringify({
+                nome: Faker.address.country() + "'s " + Faker.hacker.verb() + " Cup",
+                data_inizio: datai,
+                data_fine: datai,
+                slot: Math.floor(Math.random() * 64) + 1,
+                FK_Sponsor: Math.floor(Math.random() * 100) + 1,
+                FK_Organizzatore: Math.floor(Math.random() * 100) + 1,
+                premio: (Math.floor(Math.random() * 100) + 1) * Faker.random.arrayElement([10, 100, 1000, 10000])
+            }))
+                .then((response) => {
+                    index++
+                    return repeatTorneo(index)
+                })
+        }
+
+        var torneoFiller = () => {
+            repeatTorneo(0)
+        }
+
         var repeatSquadra = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Squadra/insert', querystring.stringify({
@@ -270,12 +293,16 @@ export default class App extends Component {
 
         var repeatPartita = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
+            var selectIp = Math.floor(Math.random() * 4500) + 1
+            var ip = ServerData[selectIp].ip
+            var porta = ServerData[selectIp].porta
+            var FK_Server = "" + ip + "" + porta + ""
             axios.post('http://localhost:3001/Partita/insert', querystring.stringify({
-                // data_inizo:,
-                // data_fine:,
+                data: "201" + (Math.floor(Math.random() * 6) + 1) + "-" + Math.floor(Math.random() * 12) + 1 + "-" + Math.floor(Math.random() * 30) + 1,
+                ora: "" + (Math.floor(Math.random() * 24) + 1) + ":" + (Math.floor(Math.random() * 60) + 1) + "",
                 FK_Squadra1: Math.floor(Math.random() * 17000) + 1,
-                FK_Squadra1: Math.floor(Math.random() * 17000) + 1,
-                FK_Server: Math.floor(Math.random() * 5000) + 1,
+                FK_Squadra2: Math.floor(Math.random() * 17000) + 1,
+                FK_Server: FK_Server,
                 FK_Mappa: Math.floor(Math.random() * 33) + 1,
             }))
                 .then((response) => {
@@ -287,6 +314,80 @@ export default class App extends Component {
         var partitaFiller = () => {
             repeatPartita(0)
         }
+
+
+
+        var repeatIscrizione = (index) => {
+            if (index === parseInt(this.state.limitServerRecords)) return 1
+            axios.post('http://localhost:3001/Iscrizione/insert', querystring.stringify({
+                FK_Squadra: Math.floor(Math.random() * 2000) + 1,
+                FK_Torneo: Math.floor(Math.random() * 100) + 1
+            }))
+                .then((response) => {
+                    index++
+                    return repeatIscrizione(index)
+                })
+        }
+
+        var iscrizioneFiller = () => {
+            repeatIscrizione(0)
+        }
+
+
+
+
+        var repeatMissione = (index) => {
+            if (index === parseInt(this.state.limitServerRecords)) return 1
+            axios.post('http://localhost:3001/Missione/insert', querystring.stringify({
+                nome: Faker.company.companyName(),
+                ambito: Faker.company.bs(),
+                societa: Faker.company.companyName() + " " + Faker.company.companySuffix(),
+                nazione: Faker.address.country(),
+                contatto: Faker.phone.phoneNumberFormat(),
+                verificato: Faker.random.boolean() ? 1 : 0,
+                utente: Math.floor(Math.random() * 17000) + 1
+            }))
+                .then((response) => {
+                    index++
+                    return repeatMissione(index)
+                })
+        }
+
+        var missioneFiller = () => {
+            repeatMissione(0)
+        }
+
+
+
+
+        var repeatSottoscrizione = (index) => {
+            if (index === parseInt(this.state.limitServerRecords)) return 1
+            axios.post('http://localhost:3001/Sottoscrizione/insert', querystring.stringify({
+                nome: Faker.company.companyName(),
+                ambito: Faker.company.bs(),
+                societa: Faker.company.companyName() + " " + Faker.company.companySuffix(),
+                nazione: Faker.address.country(),
+                contatto: Faker.phone.phoneNumberFormat(),
+                verificato: Faker.random.boolean() ? 1 : 0,
+                utente: Math.floor(Math.random() * 17000) + 1
+            }))
+                .then((response) => {
+                    index++
+                    return repeatSottoscrizione(index)
+                })
+        }
+
+        var sottoscrizioneFiller = () => {
+            repeatSottoscrizione(0)
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -434,6 +535,36 @@ export default class App extends Component {
                 <br />
                 <Button variant="raised" color="primary" onClick={partitaFiller}>
                     Partita
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={torneoFiller}>
+                    Torneo
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={iscrizioneFiller}>
+                    Iscrizione
+                </Button>
+                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
+                    Delete server
+                </Button> */}
+                <br />
+                <br />
+
+                <br />
+                <Button variant="raised" color="primary" onClick={sottoscrizioneFiller}>
+                    Sottoscrizione
                 </Button>
                 {/* <Button variant="raised" color="primary" onClick={deleteServer}>
                     Delete server
