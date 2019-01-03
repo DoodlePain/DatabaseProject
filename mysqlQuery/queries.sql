@@ -1,13 +1,12 @@
 -- create table Server
 CREATE TABLE Server (
-    id_server int PRIMARY KEY auto_increment NOT NULL,
-    ip VARCHAR(15) NOT NULL,
-    porta int NOT NULL,
+    ip VARCHAR(21) NOT NULL,
     locazione VARCHAR(50) NOT NULL,
     tick int NOT NULL DEFAULT 128,
-    primary key (id_server)
+    primary key (ip)
     );
-Engine=InnoDB;
+
+
 CREATE TABLE Server (
     ip VARCHAR(15) NOT NULL,
     porta varchar(4) NOT NULL,
@@ -134,7 +133,7 @@ CREATE TABLE Partita (
     ora VARCHAR(50) NOT NULL,
     FK_Squadra1 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
-    FK_Server string NOT NULL REFERENCES Server(id_server) ON DELETE CASCADE,
+    FK_Server varchar(21) NOT NULL REFERENCES Server(ip) ON DELETE CASCADE,
     FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) ON DELETE CASCADE
 );
 

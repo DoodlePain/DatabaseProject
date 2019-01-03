@@ -3,6 +3,10 @@ var app = express()
 const bodyParser = require('body-parser')
 var mysql = require('mysql')
 var cors = require('cors');
+var servers = require('./servers.json')
+var fs = require('fs')
+
+var serversToSave = []
 
 var connection = mysql.createConnection({ host: 'localhost', user: 'tuna', password: 'banana', database: 'Faceit' });
 
@@ -52,17 +56,34 @@ app.get('/Server/deleteServer', (req, res) => {
         });
 })
 
-app.post('/Server/insert', (req, res) => {
+app.post('/Server/insert', async (req, res) => {
     console.log("Random data insert into Server table request");
-    var query1 = "INSERT INTO Server (ip,locazione,porta,tick) VALUES  (\"" + req.body.ip + "\",\"" + req.body.locazione + "\"," + req.body.porta + "," + req.body.tick + ")"
-    console.log(req.body);
-
+    var query1 = "INSERT INTO Server (ip,locazione,tick) VALUES  (\"" + req.body.ip + "\",\"" + req.body.locazione + "\"," + req.body.tick + ")"
+    serversToSave.push(req.body.ip)
     connection
         .query(query1, function (error, results, fields) {
             if (error)
                 throw error;
         })
     res.json({ note: "Recorded" })
+})
+
+app.get('/saveData', (req, res) => {
+    var localChanges = JSON.stringify([...servers, ...serversToSave])
+    console.log(localChanges.length)
+    fs.writeFile('./src/servers.json', localChanges, 'utf8', (e, data) => {
+        if (e) throw e
+    })
+})
+
+app.get('/popData', async (req, res) => {
+    var localChanges = [...servers]
+    // console.log(typeof localChanges);
+
+    console.log(localChanges.pop())
+    await fs.writeFileSync('./src/servers.json', JSON.stringify(localChanges), 'utf8', (e, data) => {
+        if (e) throw e
+    })
 })
 
 app.post('/Utente/insert', (req, res) => {

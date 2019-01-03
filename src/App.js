@@ -4,8 +4,8 @@ import axios from 'axios'
 import Faker from 'faker'
 import TextField from '@material-ui/core/TextField';
 import ServerData from './ServerData.json'
+import servers from './servers.json'
 var querystring = require('querystring');
-
 
 export default class App extends Component {
     constructor(props) {
@@ -18,6 +18,7 @@ export default class App extends Component {
             test: 'SELECT FROM ;'
         }
         this.testQuery = null
+        this.serverAdded = []
     }
     handleChangeNoRServer = name => event => {
         this.setState({
@@ -75,9 +76,9 @@ export default class App extends Component {
 
         var repeatServer = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
+            var ip = Faker.internet.ip() + ":" + (Math.round(Math.random() * (3100 - 3000) + 3000))
             axios.post('http://localhost:3001/Server/insert', querystring.stringify({
-                ip: Faker.internet.ip(),
-                porta: Math.round(Math.random() * (3100 - 3000) + 3000),
+                ip: ip,
                 locazione: Faker.address.country(),
                 tick: 128
             }))
@@ -89,6 +90,7 @@ export default class App extends Component {
 
         var serverFiller = () => {
             repeatServer(0)
+
         }
 
 
@@ -253,7 +255,7 @@ export default class App extends Component {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Squadra/insert', querystring.stringify({
                 nome: Faker.random.words(),
-                FK_Sponsor: Math.floor(Math.random() * 17000) + 1,
+                FK_Sponsor: Math.floor(Math.random() * 100) + 1,
                 FK_Leader: Math.floor(Math.random() * 17000) + 1,
                 FK_Manager: Math.floor(Math.random() * 17000) + 1,
                 FK_Statistiche: Math.floor(Math.random() * 17000) + 1,
@@ -296,7 +298,10 @@ export default class App extends Component {
             var selectIp = Math.floor(Math.random() * 4500) + 1
             var ip = ServerData[selectIp].ip
             var porta = ServerData[selectIp].porta
-            var FK_Server = "" + ip + "" + porta + ""
+            var FK_Server = servers.pop()
+            axios.get('http://localhost:3001/popData').then(res => {
+                console.log("Popped last");
+            });
             axios.post('http://localhost:3001/Partita/insert', querystring.stringify({
                 data: "201" + (Math.floor(Math.random() * 6) + 1) + "-" + Math.floor(Math.random() * 12) + 1 + "-" + Math.floor(Math.random() * 30) + 1,
                 ora: "" + (Math.floor(Math.random() * 24) + 1) + ":" + (Math.floor(Math.random() * 60) + 1) + "",
@@ -361,6 +366,8 @@ export default class App extends Component {
 
 
         var repeatSottoscrizione = (index) => {
+            var durata = [1, 3, 6, 12]
+            var mese = Math.floor(Math.random() * 4) + 1
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Sottoscrizione/insert', querystring.stringify({
                 nome: Faker.company.companyName(),
