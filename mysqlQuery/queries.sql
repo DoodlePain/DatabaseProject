@@ -245,3 +245,50 @@ insert into Abbonamento (tipo,costo,durata) values
 ('premium',29.97,3),
 ('premium',53.95,6),
 ('premium',83.88,12);
+
+
+
+-- QUERY 
+-- Tutti gli staffer, con i relativi ruoli e ambiti 
+select username,ruolo, ambito from Staff,Utente where id_utente=FK_Utente
+
+--  Tutti gli utenti italiani con il TFA attivo
+select Utente.username from Utente where lingua = "it" and tfa=1;
+
+-- Il nome di tutti i tornei con almeno 32 Slot e un premio di almeno 2000 Punti
+select nome from Torneo where slot>=32 and premio>2000;
+
+-- Tutti i nomi delle squadre con almeno un giocatore livello 10
+select Squadra.nome from Squadra,Utente, Componenti,Statistiche where (
+Componenti.FK_Utente1=Utente.id_utente or
+Componenti.FK_Utente2=Utente.id_utente or
+Componenti.FK_Utente3=Utente.id_utente or
+Componenti.FK_Utente4=Utente.id_utente or
+Componenti.FK_Utente5=Utente.id_utente or
+Componenti.FK_Utente6=Utente.id_utente or
+Componenti.FK_Utente7=Utente.id_utente or
+Componenti.FK_Utente8=Utente.id_utente) and FK_Statistiche=id_stat and livello=10 and FK_Squadra = id_Squadra
+
+-- Tutti i giocatori tedeschi in classifica top 10k
+select * from Statistiche,Utente where FK_Statistiche = id_stat and class_continentale between 1 and 10000 and lingua like "de%"
+
+-- Tutti i giocatori italiani con un winrate di almeno 45%
+select * from Statistiche,Utente where FK_Statistiche = id_stat and winrate>45 and lingua="it"
+
+-- Spesso bisogna controllare gli utenti con statistiche molto elevate per controllare se sono leciti, quindi mostriamo tutti i giocatori con statistiche sopra la media
+select Utente.username,winrate  from Utente,Statistiche where FK_Statistiche = id_stat and winrate>(select avg(winrate) from Statistiche)+25
+
+-- Utenti che stanno in top 10000 naz e continentale
+select * from Statistiche where class_continentale<=10000 or class_nazionale<=1000
+
+-- Donne che sono in classifica nazionale e continentale top 10000
+select * from Utente,Statistiche where FK_Statistiche=id_stat and  (class_continentale<=10000 or class_nazionale<=1000) and sesso="f"
+
+-- Utenti con un abbonamento attivo maggiore di 6 mesi
+select * from Sottoscrizione where data_fine>'2019-01-10'
+
+-- Username con la lunghezza maggiore
+select username from Utente where length(username) = (select max(length(username)) from Utente )
+
+-- Totale dei premi nel 2016
+select sum(premio) from Torneo where data_inizio between '2016-01-01' and  '2016-12-31'

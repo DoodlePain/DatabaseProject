@@ -367,16 +367,15 @@ export default class App extends Component {
 
         var repeatSottoscrizione = (index) => {
             var durata = [1, 3, 6, 12]
-            var mese = Math.floor(Math.random() * 4) + 1
+            var mese = Math.floor(Math.random() * 4)
+            var data_inizio = '201' + (Math.floor(Math.random() * 3) + 6) + '-' + (Math.floor(Math.random() * 12)) + '-' + (Math.floor(Math.random() * 30))
+            var data_fine = abbonamento(data_inizio, durata[mese])
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Sottoscrizione/insert', querystring.stringify({
-                nome: Faker.company.companyName(),
-                ambito: Faker.company.bs(),
-                societa: Faker.company.companyName() + " " + Faker.company.companySuffix(),
-                nazione: Faker.address.country(),
-                contatto: Faker.phone.phoneNumberFormat(),
-                verificato: Faker.random.boolean() ? 1 : 0,
-                utente: Math.floor(Math.random() * 17000) + 1
+                data_inizio,
+                data_fine,
+                FK_Abbonamento: (durata[mese] * Math.floor(Math.random() * 4) + 1),
+                FK_Utente: Math.floor(Math.random() * 17000) + 1
             }))
                 .then((response) => {
                     index++
@@ -387,14 +386,6 @@ export default class App extends Component {
         var sottoscrizioneFiller = () => {
             repeatSottoscrizione(0)
         }
-
-
-
-
-
-
-
-
 
 
 
@@ -413,6 +404,20 @@ export default class App extends Component {
                     console.log(response.data.data[0]);
                 })
         }
+
+
+        var abbonamento = (data_inizio, mesi) => {
+            var anno = parseInt(data_inizio.split('-')[0])
+            var mese = parseInt(data_inizio.split('-')[1]) + mesi
+            if (mese > 12) {
+                anno = anno + 1
+                mese = mese % 12
+            }
+            var giorno = parseInt(data_inizio.split('-')[2])
+            var data_fine = '' + anno + "-" + mese + '-' + giorno
+            return data_fine
+        }
+
 
         return (
             <div>
