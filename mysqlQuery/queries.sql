@@ -248,7 +248,7 @@ insert into Abbonamento (tipo,costo,durata) values
 
 
 
--- QUERY :
+-- QUERY : 
 -- Tutti gli staffer, con i relativi ruoli e ambiti 
 select username,ruolo, ambito from Staff,Utente where id_utente=FK_Utente
 
@@ -304,3 +304,16 @@ select Sponsor.nome,count(FK_Sponsor) as Squadre_Sponsorizzate from Squadra, Spo
 select Organizzatore.nome
 from Organizzatore LEFT JOIN Torneo ON FK_Organizzatore =id_organizzatore
 WHERE FK_Organizzatore IS NULL and verificato=1
+
+-- Numero di squadre iscritte ad ogni torneo 
+select nome,Sum(FK_Squadra)  From Iscrizione,Torneo where FK_Torneo = id_torneo order by FK_Torneo asc
+DA SISTEMARE
+
+-- Numero di partite giocate su ogni mappa
+select nome,count(FK_Mappa) as partite_giocate From Partita,Mappa where FK_Mappa= id_mappa group by nome;
+
+-- Numero di partite giocate nel 2018
+select * from Partita where data between '2018-01-01' and '2018-12-31';
+
+-- Numero di abbonamenti venduti per ogni tipo 
+select tipo,durata,count(id_sottoscrizione) from Abbonamento,Sottoscrizione where FK_Abbonamento=id_abbonamento Group by id_abbonamento;
