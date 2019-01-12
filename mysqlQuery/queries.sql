@@ -248,7 +248,7 @@ insert into Abbonamento (tipo,costo,durata) values
 
 
 
--- QUERY 
+-- QUERY :
 -- Tutti gli staffer, con i relativi ruoli e ambiti 
 select username,ruolo, ambito from Staff,Utente where id_utente=FK_Utente
 
@@ -276,19 +276,20 @@ select * from Statistiche,Utente where FK_Statistiche = id_stat and class_contin
 select * from Statistiche,Utente where FK_Statistiche = id_stat and winrate>45 and lingua="it"
 
 -- Spesso bisogna controllare gli utenti con statistiche molto elevate per controllare se sono leciti, quindi mostriamo tutti i giocatori con statistiche sopra la media
-select Utente.username,winrate  from Utente,Statistiche where FK_Statistiche = id_stat and winrate>(select avg(winrate) from Statistiche)+25
+select Utente.username,winrate  from Utente,Statistiche where FK_Statistiche 
+= id_stat and winrate>(select avg(winrate) from Statistiche)+25
 
 -- Utenti che stanno in top 10000 naz e continentale
 select * from Statistiche where class_continentale<=10000 or class_nazionale<=1000
 
--- Donne che sono in classifica nazionale e continentale top 10000
-select * from Utente,Statistiche where FK_Statistiche=id_stat and  (class_continentale<=10000 or class_nazionale<=1000) and sesso="f"
+-- Eta' media dei giocatori
+select avg((CURRENT_DATE - data_di_nascita )/10000) as Anni, data_di_nascita , CURRENT_DATE from Utente;
 
--- Utenti con un abbonamento attivo maggiore di 6 mesi
-select * from Sottoscrizione where data_fine>'2019-01-10'
+-- La media dei premi dei tornei nel dicembre del 2016
+select avg(premio) from Torneo where slot>30 and (data_inizio between '2016-12-01' and '2016-12-31') and (data_fine between '2016-12-01' and '2016-12-31')
 
--- Username con la lunghezza maggiore
-select username from Utente where length(username) = (select max(length(username)) from Utente )
+-- Numero di utenti con la mail Gmail
+select count(email) from Utente where email like "%gmail.com";
 
--- Totale dei premi nel 2016
-select sum(premio) from Torneo where data_inizio between '2016-01-01' and  '2016-12-31'
+-- Username data di nascita ed eta' delle persone verificate in lega Gold
+select username,data_di_nascita,(CURRENT_DATE - data_di_nascita )/10000 as eta from Utente,Statistiche where tfa=1 and FK_Statistiche = id_stat and ((CURRENT_DATE - data_di_nascita )/10000)>18 and lega = "Gold" ;
