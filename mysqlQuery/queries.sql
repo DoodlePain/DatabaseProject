@@ -293,3 +293,14 @@ select count(email) from Utente where email like "%gmail.com";
 
 -- Username data di nascita ed eta' delle persone verificate in lega Gold
 select username,data_di_nascita,(CURRENT_DATE - data_di_nascita )/10000 as eta from Utente,Statistiche where tfa=1 and FK_Statistiche = id_stat and ((CURRENT_DATE - data_di_nascita )/10000)>18 and lega = "Gold" ;
+
+-- Tutti i server che sono stati usati in piu' di una partita
+select *,count(FK_Server) from Partita,Server where FK_Server=ip group by FK_Server having count(FK_Server)>1 ;
+
+-- Tutte gli sponsor che sponsorizzano almeno 2 squadre
+select Sponsor.nome,count(FK_Sponsor) as Squadre_Sponsorizzate from Squadra, Sponsor where FK_Sponsor = id_sponsor group by FK_Sponsor having count(FK_Sponsor)>1
+
+-- TUtti gli organizzatori Verificati che non hanno mai organizzato un torneo
+select Organizzatore.nome
+from Organizzatore LEFT JOIN Torneo ON FK_Organizzatore =id_organizzatore
+WHERE FK_Organizzatore IS NULL and verificato=1
