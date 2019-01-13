@@ -317,3 +317,25 @@ select * from Partita where data between '2018-01-01' and '2018-12-31';
 
 -- Numero di abbonamenti venduti per ogni tipo 
 select tipo,durata,count(id_sottoscrizione) from Abbonamento,Sottoscrizione where FK_Abbonamento=id_abbonamento Group by id_abbonamento;
+
+
+
+
+TRIGGER
+-- Impedisce di creare utenti di eta' minore di 16 anni
+CREATE TRIGGER controllo_eta
+BEFORE INSERT ON Utente
+FOR EACH ROW
+IF ((CURRENT_DATE() - NEW.data_di_nascita )/10000)<16
+THEN
+SET NEW.username = null;
+END IF;
+
+-- Imposta un premio minimo a 500 fp 
+CREATE TRIGGER premio_minimo
+BEFORE INSERT ON torneo
+FOR EACH ROW
+IF (NEW.premio<500)
+THEN
+SET NEW.premio = 500
+END IF;
