@@ -1,10 +1,13 @@
+
+
+
 -- create table Server
 CREATE TABLE Server (
     ip VARCHAR(21) NOT NULL,
     locazione VARCHAR(50) NOT NULL,
     tick int NOT NULL DEFAULT 128,
     primary key (ip)
-    )
+    ); 
 
 -- create table Utente
 CREATE TABLE Utente (
@@ -19,11 +22,12 @@ CREATE TABLE Utente (
     tfa Boolean NOT NULL DEFAULT 0,                                    
     steamid VARCHAR(50) NOT NULL,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
-    )
+    );  
 
 
 -- create table Statistiche
 CREATE TABLE Statistiche (
+    id_stat int PRIMARY KEY auto_increment,
     elo int NOT NULL,
     livello int NOT NULL,
     lega VARCHAR(30),
@@ -33,7 +37,7 @@ CREATE TABLE Statistiche (
     partite_vinte int NOT NULL,
     partite_perse int NOT NULL,
     winrate int NOT NULL
-);
+); 
 
 -- create table Sponsor
 CREATE TABLE Sponsor (
@@ -95,28 +99,28 @@ CREATE TABLE Missioni (
 CREATE TABLE Squadra (
     id_squadra int PRIMARY KEY NOT NULL auto_increment,
     nome VARCHAR(100) NOT NULL,
-    FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
-    FK_Leader int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Manager int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ,
+    FK_Leader int NOT NULL REFERENCES Utente(id_utente) ,
+    FK_Manager int NOT NULL REFERENCES Utente(id_utente) ,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
 );
 
 -- create table Componenti
 CREATE TABLE Componenti (
     id_componenti int PRIMARY KEY NOT NULL auto_increment,
-    FK_Utente int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Squadra int  REFERENCES Squadra(id_squadra) ON DELETE CASCADE
-) Engine=InnoDB;
+    FK_Utente int  REFERENCES Utente(id_utente) ,
+    FK_Squadra int  REFERENCES Squadra(id_squadra) 
+);
 
 -- create table Partita
 CREATE TABLE Partita (
     id_partita int PRIMARY KEY NOT NULL auto_increment,
     data date NOT NULL,
     ora VARCHAR(50) NOT NULL,
-    FK_Squadra1 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
-    FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
-    FK_Server varchar(21) NOT NULL REFERENCES Server(ip) ON DELETE CASCADE,
-    FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) ON DELETE CASCADE
+    FK_Squadra1 int NOT NULL REFERENCES Squadra(id_squadra) ,
+    FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ,
+    FK_Server varchar(21) NOT NULL REFERENCES Server(ip) ,
+    FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) 
 );
 
 -- create table Abbonamento
@@ -134,18 +138,19 @@ create table Torneo (
     slot int,
     data_inizio date not null,
     data_fine date not null,
-    FK_Organizzatore int NOT NULL REFERENCES Organizzatore(id_organizzatore) ON DELETE CASCADE,
-    FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
-    premio int default 0);
+    FK_Organizzatore int NOT NULL REFERENCES Organizzatore(id_organizzatore) ,
+    FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ,
+    premio int default 0)
+    ;
 
 -- create table Sottoscrizione
 create table Sottoscrizione (
     id_sottoscrizione int auto_increment not null primary key,
     data_inizio date not null,
     data_fine date not null,
-    FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Abbonamento int NOT NULL REFERENCES Abbonamento(id_abbonamento) ON DELETE CASCADE
-    ); 
+    FK_Utente int NOT NULL REFERENCES Utente(id_utente),
+    FK_Abbonamento int NOT NULL REFERENCES Abbonamento(id_abbonamento)
+    );
 
 -- create table Iscrizione
 create table Iscrizione(
@@ -163,7 +168,7 @@ insert into Gioco (nome,abbreviazione,piattaforma) values
     ('Rocket League','RL','Steam'),
     ('Smite','Smite','HiRez'),
     ('Team Fortress 2','TF2','Steam'),
-    ('Insidia','Insidia','Steam'),
+('Insidia','Insidia','Steam'),
     ('Dirty Bomb','DB','Steam'),
     ('World of tanks','WOT','Wargaming.net'),
     ('League of Legends','LOL','RIOT'),
@@ -242,7 +247,14 @@ select nome from Torneo where slot>=32 and premio>2000;
 
 -- Tutti i nomi delle squadre con almeno un giocatore livello 10
 select Squadra.nome from Squadra,Utente, Componenti,Statistiche where (
-Componenti.FK_Utente=Utente.id_utente and FK_Statistiche=id_stat and livello=10 and FK_Squadra = id_Squadra
+Componenti.FK_Utente1=Utente.id_utente or
+Componenti.FK_Utente2=Utente.id_utente or
+Componenti.FK_Utente3=Utente.id_utente or
+Componenti.FK_Utente4=Utente.id_utente or
+Componenti.FK_Utente5=Utente.id_utente or
+Componenti.FK_Utente6=Utente.id_utente or
+Componenti.FK_Utente7=Utente.id_utente or
+Componenti.FK_Utente8=Utente.id_utente) and FK_Statistiche=id_stat and livello=10 and FK_Squadra = id_Squadra
 
 -- Tutti i giocatori tedeschi in classifica top 10k
 select * from Statistiche,Utente where FK_Statistiche = id_stat and class_continentale between 1 and 10000 and lingua like "de%"
@@ -275,7 +287,7 @@ select *,count(FK_Server) from Partita,Server where FK_Server=ip group by FK_Ser
 -- Tutte gli sponsor che sponsorizzano almeno 2 squadre
 select Sponsor.nome,count(FK_Sponsor) as Squadre_Sponsorizzate from Squadra, Sponsor where FK_Sponsor = id_sponsor group by FK_Sponsor having count(FK_Sponsor)>1
 
--- Tutti gli organizzatori Verificati che non hanno mai organizzato un torneo
+-- TUtti gli organizzatori Verificati che non hanno mai organizzato un torneo
 select Organizzatore.nome
 from Organizzatore LEFT JOIN Torneo ON FK_Organizzatore =id_organizzatore
 WHERE FK_Organizzatore IS NULL and verificato=1
