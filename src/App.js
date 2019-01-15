@@ -273,14 +273,7 @@ export default class App extends Component {
         var repeatComponenti = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Componenti/insert', querystring.stringify({
-                utente1: Math.floor(Math.random() * 17000) + 1,
-                utente2: Math.floor(Math.random() * 17000) + 1,
-                utente3: Math.floor(Math.random() * 17000) + 1,
-                utente4: Math.floor(Math.random() * 17000) + 1,
-                utente5: Math.floor(Math.random() * 17000) + 1,
-                utente6: Math.floor(Math.random() * 17000) + 1,
-                utente7: Math.floor(Math.random() * 17000) + 1,
-                utente8: Math.floor(Math.random() * 17000) + 1,
+                utente: Math.floor(Math.random() * 17000) + 1,
                 FK_Squadra: Math.floor(Math.random() * 2000) + 1
             }))
                 .then((response) => {

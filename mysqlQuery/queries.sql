@@ -1,6 +1,3 @@
-
-
-
 -- create table Server
 CREATE TABLE Server (
     ip VARCHAR(21) NOT NULL,
@@ -8,7 +5,16 @@ CREATE TABLE Server (
     tick int NOT NULL DEFAULT 128,
     primary key (ip)
     )
-    Engine=InnoDB; 
+    Engine=InnoDB;
+
+
+CREATE TABLE Server (
+    ip VARCHAR(15) NOT NULL,
+    porta varchar(4) NOT NULL,
+    locazione VARCHAR(50) NOT NULL,
+    tick int NOT NULL DEFAULT 128,
+    primary key (ip,porta)
+    );
 
 -- create table Utente
 CREATE TABLE Utente (
@@ -39,7 +45,7 @@ CREATE TABLE Statistiche (
     partite_vinte int NOT NULL,
     partite_perse int NOT NULL,
     winrate int NOT NULL
-)Engine=InnoDB; 
+);
 
 -- create table Sponsor
 CREATE TABLE Sponsor (
@@ -48,7 +54,7 @@ CREATE TABLE Sponsor (
     nazione VARCHAR(100) NOT NULL,
     ambito VARCHAR(100) NOT NULL,
     societa VARCHAR(100) NOT NULL
-)Engine=InnoDB;
+);
 
 -- create table Organizzatori
 CREATE TABLE Organizzatore (
@@ -60,7 +66,7 @@ CREATE TABLE Organizzatore (
     contatto VARCHAR(100) NOT NULL,
     verificato Boolean NOT NULL,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
-)Engine=InnoDB;
+);
 
 -- create table Gioco 
 CREATE TABLE Gioco (
@@ -68,7 +74,7 @@ CREATE TABLE Gioco (
     nome VARCHAR(100) NOT NULL,
     piattaforma VARCHAR(100) NOT NULL,
     abbreviazione VARCHAR(50) not null
-)Engine=InnoDB;
+);
 
 -- create table Mappa
 CREATE TABLE Mappa (
@@ -77,7 +83,7 @@ CREATE TABLE Mappa (
     numero_giocatori int NOT NULL,
     modalita VARCHAR(100) NOT NULL,
     FK_Gioco VARCHAR(100) not null references Gioco(id_gioco) on delete cascade
-)Engine=InnoDB;
+);
 
 -- create table Staff
 CREATE TABLE Staff (
@@ -85,7 +91,7 @@ CREATE TABLE Staff (
     ambito VARCHAR(100) NOT NULL,
     ruolo VARCHAR(100) NOT NULL,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
-)Engine=InnoDB;
+);
 
 -- create table Missioni
 CREATE TABLE Missioni (
@@ -95,7 +101,7 @@ CREATE TABLE Missioni (
     scopo VARCHAR(100) NOT NULL,
     FK_Gioco VARCHAR(100) NOT NULL REFERENCES Gioco(nome),
     FK_Premio int NOT NULL REFERENCES Oggetti(id_ogetto) ON DELETE CASCADE
-)Engine=InnoDB;
+);
 
 -- create table Squadra
 CREATE TABLE Squadra (
@@ -105,21 +111,14 @@ CREATE TABLE Squadra (
     FK_Leader int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
     FK_Manager int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
-)Engine=InnoDB;
+);
 
 -- create table Componenti
 CREATE TABLE Componenti (
     id_componenti int PRIMARY KEY NOT NULL auto_increment,
-    FK_Utente1 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente2 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente3 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente4 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente5 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente6 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente7 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
-    FK_Utente8 int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
+    FK_Utente int  REFERENCES Utente(id_utente) ON DELETE CASCADE,
     FK_Squadra int  REFERENCES Squadra(id_squadra) ON DELETE CASCADE
-)Engine=InnoDB;
+) Engine=InnoDB;
 
 -- create table Partita
 CREATE TABLE Partita (
@@ -130,7 +129,7 @@ CREATE TABLE Partita (
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ON DELETE CASCADE,
     FK_Server varchar(21) NOT NULL REFERENCES Server(ip) ON DELETE CASCADE,
     FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) ON DELETE CASCADE
-)Engine=InnoDB;
+);
 
 -- create table Abbonamento
 CREATE TABLE Abbonamento (
@@ -138,7 +137,7 @@ CREATE TABLE Abbonamento (
     durata int NOT NULL,
     costo   real NOT NULL,
     tipo VARCHAR(100) NOT NULL
-    )Engine=InnoDB;
+    );
 
 -- create table Torneo 
 create table Torneo (
@@ -149,7 +148,7 @@ create table Torneo (
     data_fine date not null,
     FK_Organizzatore int NOT NULL REFERENCES Organizzatore(id_organizzatore) ON DELETE CASCADE,
     FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ON DELETE CASCADE,
-    premio int default 0)Engine=InnoDB;
+    premio int default 0);
 
 -- create table Sottoscrizione
 create table Sottoscrizione (
@@ -158,14 +157,14 @@ create table Sottoscrizione (
     data_fine date not null,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE,
     FK_Abbonamento int NOT NULL REFERENCES Abbonamento(id_abbonamento) ON DELETE CASCADE
-    )Engine=InnoDB;
+    ); 
 
 -- create table Iscrizione
 create table Iscrizione(
     id_iscrizione int not null auto_increment primary key,
     FK_Squadra int not null references Squadra(id_squadra) ,
     FK_Torneo int not null references Torneo(id_torneo) 
-    )Engine=InnoDB;
+    );
 
 -- Games rows
 insert into Gioco (nome,abbreviazione,piattaforma) values 
@@ -255,14 +254,7 @@ select nome from Torneo where slot>=32 and premio>2000;
 
 -- Tutti i nomi delle squadre con almeno un giocatore livello 10
 select Squadra.nome from Squadra,Utente, Componenti,Statistiche where (
-Componenti.FK_Utente1=Utente.id_utente or
-Componenti.FK_Utente2=Utente.id_utente or
-Componenti.FK_Utente3=Utente.id_utente or
-Componenti.FK_Utente4=Utente.id_utente or
-Componenti.FK_Utente5=Utente.id_utente or
-Componenti.FK_Utente6=Utente.id_utente or
-Componenti.FK_Utente7=Utente.id_utente or
-Componenti.FK_Utente8=Utente.id_utente) and FK_Statistiche=id_stat and livello=10 and FK_Squadra = id_Squadra
+Componenti.FK_Utente=Utente.id_utente and FK_Statistiche=id_stat and livello=10 and FK_Squadra = id_Squadra
 
 -- Tutti i giocatori tedeschi in classifica top 10k
 select * from Statistiche,Utente where FK_Statistiche = id_stat and class_continentale between 1 and 10000 and lingua like "de%"
@@ -295,7 +287,7 @@ select *,count(FK_Server) from Partita,Server where FK_Server=ip group by FK_Ser
 -- Tutte gli sponsor che sponsorizzano almeno 2 squadre
 select Sponsor.nome,count(FK_Sponsor) as Squadre_Sponsorizzate from Squadra, Sponsor where FK_Sponsor = id_sponsor group by FK_Sponsor having count(FK_Sponsor)>1
 
--- TUtti gli organizzatori Verificati che non hanno mai organizzato un torneo
+-- Tutti gli organizzatori Verificati che non hanno mai organizzato un torneo
 select Organizzatore.nome
 from Organizzatore LEFT JOIN Torneo ON FK_Organizzatore =id_organizzatore
 WHERE FK_Organizzatore IS NULL and verificato=1

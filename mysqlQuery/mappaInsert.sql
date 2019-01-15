@@ -1,0 +1,38 @@
+
+
+
+insert into  Mappa (nome,numero_giocatori,modalita,FK_Gioco) values 
+('aquadome',6,'arena','RL'),
+('beckwith_park',6,'arena','RL'),
+('champions_field',6,'arena','RL'),
+('dfh_stadium',6,'arena','RL'),
+('mannfield',6,'arena','RL'),
+('neo_tokyo',6,'arena','RL'),
+('salty_shores',6,'arena','RL'),
+('starbase_arc',6,'arena','RL'),
+('urban_central',6,'arena','RL'),
+('Utopia_coliseum',6,'arena','RL'),
+('westeland',6,'arena','RL'),
+('standard_map',10,'arena','Insidia'),
+('de_dust2',10,'competitive','CS:GO'),
+('de_mirage',10,'competitive','CS:GO'),
+('de_cache',10,'competitive','CS:GO'),
+('de_train',10,'competitive','CS:GO'),
+('de_inferno',10,'competitive','CS:GO'),
+('de_nuke',10,'competitive','CS:GO'),
+('de_overpass',10,'competitive','CS:GO'),
+('classic_5_vs_5',10,'captains mode','D2'),
+('summoners_rift',10,'draft','LOL'),
+('olympus',10,'conquest','Smite'),
+('cp_badlands',12,'competitive','TF2'),
+('cp_granary_pro_rc4',12,'competitive','TF2'),
+('cp_gullywash_final1',12,'competitive','TF2'),
+('cp_metalworks',12,'competitive','TF2'),
+('cp_process_final',12,'competitive','TF2'),
+('cp_reckoner_b3a',12,'competitive','TF2'),
+('cp_snakewater_final1',12,'competitive','TF2'),
+('cp_sunshine_*',12,'competitive','TF2'),
+('koth_forge_b3',12,'competitive','TF2'),
+('koth_product_rc8',12,'competitive','TF2'),
+('dz_blacksite',16,'danger zone','CS:DZ')
+;
