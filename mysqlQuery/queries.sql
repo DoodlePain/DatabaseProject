@@ -5,16 +5,6 @@ CREATE TABLE Server (
     tick int NOT NULL DEFAULT 128,
     primary key (ip)
     )
-    Engine=InnoDB;
-
-
-CREATE TABLE Server (
-    ip VARCHAR(15) NOT NULL,
-    porta varchar(4) NOT NULL,
-    locazione VARCHAR(50) NOT NULL,
-    tick int NOT NULL DEFAULT 128,
-    primary key (ip,porta)
-    );
 
 -- create table Utente
 CREATE TABLE Utente (
@@ -30,12 +20,10 @@ CREATE TABLE Utente (
     steamid VARCHAR(50) NOT NULL,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
     )
-    Engine=InnoDB;  
 
 
 -- create table Statistiche
 CREATE TABLE Statistiche (
-    id_stat int PRIMARY KEY auto_increment,
     elo int NOT NULL,
     livello int NOT NULL,
     lega VARCHAR(30),

@@ -1,0 +1,5 @@
+Tutti gli utenti inglesi che hanno un abbonamento da piu' di 3 mesi
+db.utentiAbbonamentoSottoscrizione.find({lingua:"en",durata:{$gt: 3}}).pretty()
+
+Il numero totale di utenti che hanno sottoscritto l'abbonamento di csgo di 12 mesi
+db.utentiAbbonamentoSottoscrizione.find({tipo:"CSGO",durata:12}).count()

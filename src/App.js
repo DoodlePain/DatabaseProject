@@ -296,7 +296,7 @@ export default class App extends Component {
                 console.log("Popped last");
             });
             axios.post('http://localhost:3001/Partita/insert', querystring.stringify({
-                data: "201" + (Math.floor(Math.random() * 6) + 1) + "-" + Math.floor(Math.random() * 12) + 1 + "-" + Math.floor(Math.random() * 30) + 1,
+                data_partita: "201" + parseInt(Math.floor(Math.random() * 2) + 7) + "-" + Math.floor(Math.random() * 12) + "-" + Math.floor(Math.random() * 30),
                 ora: "" + (Math.floor(Math.random() * 24) + 1) + ":" + (Math.floor(Math.random() * 60) + 1) + "",
                 FK_Squadra1: Math.floor(Math.random() * 17000) + 1,
                 FK_Squadra2: Math.floor(Math.random() * 17000) + 1,

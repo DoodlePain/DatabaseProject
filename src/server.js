@@ -135,8 +135,8 @@ app.post('/Statistiche/insert', (req, res) => {
 
 app.post('/Partita/insert', (req, res) => {
     //console.log("Random data insert into Partita table request");
-    var query1 = "insert into Partita (data,ora,FK_Squadra1,FK_Squadra2,FK_Mappa,FK_Server) VALUES ('" + req.body.data + "','" + req.body.ora + "'," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + ",'" + req.body.FK_Server + "')"
-    console.log("('" + req.body.data + "','" + req.body.ora + "'," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + ",'" + req.body.FK_Server + "'),");
+    var query1 = "insert into Partita (data,ora,FK_Squadra1,FK_Squadra2,FK_Mappa,FK_Server) VALUES ('" + req.body.data_partita + "','" + req.body.ora + "'," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + ",'" + req.body.FK_Server + "')"
+    console.log("('" + req.body.data_partita + "','" + req.body.ora + "'," + req.body.FK_Squadra1 + "," + req.body.FK_Squadra2 + "," + req.body.FK_Mappa + ",'" + req.body.FK_Server + "'),");
     connection
         .query(query1, function (error, results, fields) {
             if (error)
