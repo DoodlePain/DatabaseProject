@@ -120,10 +120,10 @@ export default class App extends Component {
             if (this.state.fk_stats === []) {
                 axios.post('http://localhost:3001/Statistiche/getId').then(
                     (res) => {
-                        const result = res.data.result
-                        Object.keys(result).map((element) => {
-                            ids.push(result[element].id_stat)
-                        })
+                        // const result = res.data.result
+                        // Object.keys(result).map((element) => {
+                        //     ids.push(result[element].id_stat)
+                        // })
                     }
                 )
             }
