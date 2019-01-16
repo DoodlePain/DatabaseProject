@@ -106,11 +106,11 @@ CREATE TABLE Squadra (
 );
 
 -- create table Componenti
-CREATE TABLE Componenti (
-    id_componenti int PRIMARY KEY NOT NULL auto_increment,
-    FK_Utente int  REFERENCES Utente(id_utente) ,
-    FK_Squadra int  REFERENCES Squadra(id_squadra) 
-);
+create table Componenti(
+    FK_Utente int NOT NULL,
+    FK_Squadra int NOT NULL,
+    primary key(FK_Utente,FK_Squadra));
+
 
 -- create table Partita
 CREATE TABLE Partita (
@@ -320,9 +320,22 @@ END IF;
 
 -- Imposta un premio minimo a 500 fp 
 CREATE TRIGGER premio_minimo
-BEFORE INSERT ON torneo
+BEFORE INSERT ON Torneo
 FOR EACH ROW
 IF (NEW.premio<500)
 THEN
 SET NEW.premio = 500
 END IF;
+
+-- nuove statistiche
+create trigger stat_iniziali
+before insert on Utente
+for each row
+set NEW.FK_Statistiche = (select id_stat from 
+    Statistiche 
+    order by id_stat desc 
+    limit 1);
+insert into Statistiche 
+(elo,lega,livello,partite_giocate,partite_perse,
+partite_vinte,winrate,class_continentale,class_nazionale) 
+values (800,'Bronze',3,0,0,0,0,1000000,1000000);

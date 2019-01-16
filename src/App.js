@@ -318,8 +318,8 @@ export default class App extends Component {
         var repeatIscrizione = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Iscrizione/insert', querystring.stringify({
-                FK_Squadra: Math.floor(Math.random() * 2000) + 1,
-                FK_Torneo: Math.floor(Math.random() * 100) + 1
+                FK_Squadra: Math.floor(Math.random() * 100) + 1,
+                FK_Torneo: Math.floor(Math.random() * 150) + 300
             }))
                 .then((response) => {
                     index++
