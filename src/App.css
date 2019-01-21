@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Play');
+#root {
+    background-color: #323838;
+    color: #F5F8FA;
+    height: 100%;
+    text-align: center;
+}
+
+h1 {
+    color: #FF7D00;
+    font-size: xx-large;
+    font-family: 'Play', sans-serif;
+    font-weight: 500;
+}
+
+h5 {
+    color: #EBEFF3;
+    font-size: xx-large;
+    font-family: 'Play', sans-serif;
+    font-weight: 500;
+}
+
+body {
+    height: 100%;
+}
