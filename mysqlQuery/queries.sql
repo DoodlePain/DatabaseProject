@@ -154,9 +154,9 @@ create table Sottoscrizione (
 
 -- create table Iscrizione
 create table Iscrizione(
-    id_iscrizione int not null auto_increment primary key,
     FK_Squadra int not null references Squadra(id_squadra) ,
-    FK_Torneo int not null references Torneo(id_torneo) 
+    FK_Torneo int not null references Torneo(id_torneo),
+    PRIMARY KEY (FK_Squadra,FK_Torneo)
     );
 
 -- Games rows

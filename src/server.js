@@ -78,14 +78,18 @@ app.get('/saveData', (req, res) => {
     })
 })
 
-app.get('/popData', async (req, res) => {
+app.get('/sendData', async (req, res) => {
     var localChanges = [...servers]
     // //console.log(typeof localChanges);
 
     //console.log(localChanges.pop())
-    await fs.writeFileSync('./src/servers.json', JSON.stringify(localChanges), 'utf8', (e, data) => {
-        if (e) throw e
-    })
+    listaUtenti[listaUtenti.length] = ''
+    var query1 = "INSERT INTO Utente (username,email,lingua,nome,sesso,data_di_nascita,indirizzo,tfa,steamid,FK_Statistiche) VALUES " + listaUtenti
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
 })
 
 app.post('/Utente/insert', (req, res) => {
@@ -93,18 +97,18 @@ app.post('/Utente/insert', (req, res) => {
     // connection.query("select COUNT(*) FROM `Utente` WHERE `FK_Statistiche` = " + req.body.FK_Statistiche, (error, result, fields) => {
     // resp = parseInt(JSON.stringify(result).slice(13, 14))
     // if (resp === 0) {
-    // var query1 = 'INSERT INTO Utente (username,email,lingua,nome,sesso,data_di_nascita,indirizzo,tfa,steamid,FK_Statistiche) VALUES ("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + ');'
-    console.log('("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),');
-    listaUtenti = listaUtenti + JSON.stringify('("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),');
+    var query1 = 'INSERT INTO Utente (username,email,lingua,nome,sesso,data_di_nascita,indirizzo,tfa,steamid,FK_Statistiche) VALUES ("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + ');'
+    // console.log('("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),');
+    // listaUtenti = listaUtenti + '("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),';
 
 
-    // connection
-    //     .query(query1, function (error, results, fields) {
-    //         if (error)
-    //             throw error;
-    //     })
+    connection
+        .query(query1, function (error, results, fields) {
+            if (error)
+                throw error;
+        })
     // } else if (resp > 0) {
-    //console.log("Skipped " + req.body.username);
+    // console.log("Skipped " + req.body.username);
     // }
     // })
 
