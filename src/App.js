@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import Button from '@material-ui/core/Button';
+import { InputNumber, Button, Input, Menu, Icon, Row, Col } from 'antd'
+import 'antd/dist/antd.css';
 import axios from 'axios'
 import Faker from 'faker'
-import TextField from '@material-ui/core/TextField';
+import './App.css'
 import ServerData from './ServerData.json'
 import servers from './servers.json'
 var querystring = require('querystring');
@@ -12,17 +13,18 @@ export default class App extends Component {
         super(props);
         this.state = {
             result: '',
-            limitServerRecords: 100,
+            limitServerRecords: 1000,
             NoRServer: 0,
             fk_stats: [],
-            test: 'SELECT FROM ;'
+            test: 'SELECT FROM ;',
+            current: 'query'
         }
         this.testQuery = null
         this.serverAdded = []
     }
-    handleChangeNoRServer = name => event => {
+    handleChangeNoRServer = (value) => {
         this.setState({
-            limitServerRecords: event.target.value,
+            limitServerRecords: value,
         });
     };
 
@@ -47,6 +49,7 @@ export default class App extends Component {
         if (this.state.limitServerRecords !== nextState.limitServerRecords) return true
         if (this.state.test !== nextState.test) return true
         if (this.state.result !== nextState.result) return true
+        if (this.state.current !== nextState.current) return true
         return false
     }
 
@@ -412,180 +415,87 @@ export default class App extends Component {
         }
 
 
+        var handleClickMenu = (e) => {
+            this.setState({
+                current: e.key,
+            });
+        }
+
+
+        const { TextArea } = Input;
+        var bStyle = { width: '130px', height: '40px', background: 'rgba(0,0,0,0.2)', color: 'white' }
         return (
             <div>
-                <br />
-                <Button variant="raised" color="primary" onClick={queryResult}>
-                    Records : {this.state.NoRServer}
+                <h1>FACEIT DATABASE FILLER <img src="https://static.hltv.org/images/eventLogos/1616.png" alt="Faceit logo" style={{ width: '50px', height: '50px' }} /></h1>
+                <Menu
+                    onClick={handleClickMenu}
+                    selectedKeys={[this.state.current]}
+                    defaultValue="query"
+                    mode="horizontal"
+                    style={{ background: '#323838', color: '#EBEFF3' }}
+                >
+                    <Menu.Item key="query">
+                        <Icon type="search" /> Query
+                    </Menu.Item>
+                    <Menu.Item key="insert">
+                        <Icon type="edit" /> Insert
+                    </Menu.Item>
+                </Menu>
+                <div className="query"
+                    style={{ display: this.state.current == "query" ? "inline" : "none" }}
+                >
+                    <h5 style={{ display: 'inline' }}>
+                        Query :
+                </h5>
+                    <Input style={{ width: '600px', marginLeft: '15px', display: 'inline' }} placeholder="Query example : SELECT * FROM Utente;" />
+                    < Button size="large" onClick={serversByLocation} style={{ display: 'inline', marginLeft: '7px' }}>
+                        Submit Query
                 </Button>
-                <Button variant="raised" color="primary" onClick={clearServerResult}>
-                    Clear server result
-                </Button>
-                <br />
-                {this.state.result}
-                <br />
+                    <br />
+                    <br />
+                    <TextArea style={{ width: '850px', height: '600px' }} placeholder="There will be the result of the query" value={this.state.result}>
 
-                <TextField
-                    id="name"
-                    label="Number of records"
-                    className="textField"
-                    value={this.state.limitServerRecords}
-                    onChange={this.handleChangeNoRServer('name')}
-                />
-                <br />
-                <br />
+                    </TextArea>
+                </div>
 
-                <TextField
-                    id="test"
-                    label="test query"
-                    className="textField"
-                    value={this.state.test}
-                    onChange={this.handleTestQuery('test')}
-                />
-                <Button variant="raised" onClick={this.testQuery}>
-                    testquery
-                </Button>
-                <br />
-                <br />
-                <Button variant="raised" color="primary" onClick={serverFiller}>
-                    Server
-                </Button>
-                <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button>
-                <br />
-                <br />
-                <br />
-                <Button variant="raised" color="primary" onClick={serversByLocation}>
-                    Number of server for each location
-                </Button>
-                <br />
-                <br />
+                <div className="insert"
+                    style={{ display: this.state.current == "insert" ? "inline" : "none" }}
+                >
+                    <br />
+                    <h5 style={{ display: 'inline' }}>
+                        Select the number of records :
+                </h5>
+                    <InputNumber defaultValue={1000} onChange={this.handleChangeNoRServer} />
+                    <br />
+                    <br />
+                    <Row>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Server</Button>
+                        < Button type="dashed" size="large" onClick={userFiller} style={bStyle}>Utente</Button>
+                        < Button type="dashed" size="large" onClick={statisticheFiller} style={bStyle}>Statistiche</Button>
+                        < Button type="dashed" size="large" onClick={sponsorFiller} style={bStyle}>Sponsor</Button>
+                    </Row>
+                    <Row>
 
-                <Button variant="raised" color="primary" onClick={userFiller}>
-                    Utente
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
+                        < Button type="dashed" size="large" onClick={organizzatoriFiller} style={bStyle}>Organizzatori</Button>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Gioco</Button>
+                        < Button type="dashed" size="large" onClick={staffFiller} style={bStyle}>Staff</Button>
+                        < Button type="dashed" size="large" onClick={squadraFiller} style={bStyle}>Squadra</Button>
 
-                <Button variant="raised" color="primary" onClick={statisticheFiller}>
-                    Statistiche
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
+                    </Row>
+                    <Row>
+                        < Button type="dashed" size="large" onClick={componentiFiller} style={bStyle}>Componenti</Button>
+                        < Button type="dashed" size="large" onClick={partitaFiller} style={bStyle}>Partita</Button>
+                        < Button type="dashed" size="large" onClick={torneoFiller} style={bStyle}>Torneo</Button>
+                        < Button type="dashed" size="large" onClick={iscrizioneFiller} style={bStyle}>Iscrizione</Button>
 
-                <Button variant="raised" color="primary" onClick={sponsorFiller}>
-                    Sponsor
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
+                    </Row>
+                    <Row>
+                        < Button type="dashed" size="large" onClick={sottoscrizioneFiller} style={bStyle}>Sottoscrizione</Button>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Mappe</Button>
+                    </Row>
 
-                <Button variant="raised" color="primary" onClick={organizzatoriFiller}>
-                    Organizzatori
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <Button variant="raised" color="primary" onClick={serverFiller}>
-                    Gioco
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={staffFiller}>
-                    Staff
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={squadraFiller}>
-                    Squadra
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-
-                <br />
-                <Button variant="raised" color="primary" onClick={componentiFiller}>
-                    Componenti
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={partitaFiller}>
-                    Partita
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={torneoFiller}>
-                    Torneo
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={iscrizioneFiller}>
-                    Iscrizione
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-                <br />
-                <Button variant="raised" color="primary" onClick={sottoscrizioneFiller}>
-                    Sottoscrizione
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-                <br />
-                <br />
-
-
-
-                <Button variant="raised" color="primary" onClick={serverFiller}>
-                    Mappe
-                </Button>
-                {/* <Button variant="raised" color="primary" onClick={deleteServer}>
-                    Delete server
-                </Button> */}
-            </div>
+                </div>
+            </div >
         )
     }
 }
