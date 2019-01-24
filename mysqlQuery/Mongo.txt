@@ -3,3 +3,9 @@ db.utentiAbbonamentoSottoscrizione.find({lingua:"en",durata:{$gt: 3}}).pretty()
 
 Il numero totale di utenti che hanno sottoscritto l'abbonamento di csgo di 12 mesi
 db.utentiAbbonamentoSottoscrizione.find({tipo:"CSGO",durata:12}).count()
+
+
+
+
+query 5
+db.utenteStat.find({$and: [{$or: [{class_nazionale:{ $gt: 1, $lt: 10000 }},{class_continentale:{ $gt: 1, $lt: 10000 }}]},{lingua:'de'}]}).explain("executionStats")

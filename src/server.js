@@ -27,7 +27,7 @@ app.get('/Server/query', (req, res) => {
 })
 
 app.get('/Server/count', (req, res) => {
-    //console.log("Query count request from " + req.headers['x-forwarded-for']);
+    console.log("Query count request from " + req.headers['x-forwarded-for']);
 
     connection
         .query('SELECT COUNT(ip) AS length FROM Server;', function (error, results, fields) {
@@ -59,7 +59,7 @@ app.get('/Server/deleteServer', (req, res) => {
 })
 
 app.post('/Server/insert', async (req, res) => {
-    //console.log("Random data insert into Server table request");
+    console.log("Random data insert into Server table request");
     var query1 = "INSERT INTO Server (ip,locazione,tick) VALUES  (\"" + req.body.ip + "\",\"" + req.body.locazione + "\"," + req.body.tick + ")"
     serversToSave.push(req.body.ip)
     connection
@@ -98,7 +98,7 @@ app.post('/Utente/insert', (req, res) => {
     // resp = parseInt(JSON.stringify(result).slice(13, 14))
     // if (resp === 0) {
     var query1 = 'INSERT INTO Utente (username,email,lingua,nome,sesso,data_di_nascita,indirizzo,tfa,steamid,FK_Statistiche) VALUES ("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + ');'
-    // console.log('("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),');
+    console.log('("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),');
     // listaUtenti = listaUtenti + '("' + req.body.username + '","' + req.body.email + '","' + req.body.lingua + '","' + req.body.nome + '","' + req.body.sesso + '","' + req.body.data_di_nascita + '","' + req.body.indirizzo + '",' + req.body.tfa + ',"' + req.body.steamid + '",' + req.body.FK_Statistiche + '),';
 
 
@@ -118,7 +118,7 @@ app.post('/Utente/insert', (req, res) => {
 
 app.post('/testquery', (req, res) => {
     let querytext = req.body.test
-    //console.log(querytext);
+    console.log(querytext);
 
     connection.query(querytext, (err, result, fields) => {
         var data = result

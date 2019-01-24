@@ -28,7 +28,7 @@ export default class App extends Component {
         });
     };
 
-    handleTestQuery = name => event => {
+    handleTestQuery = event => {
         this.setState({
             test: event.target.value
         })
@@ -397,7 +397,7 @@ export default class App extends Component {
                 test: this.state.test
             }))
                 .then((response) => {
-                    console.log(response.data.data[0]);
+                    this.setState({ result: JSON.stringify(response.data.data) })
                 })
         }
 
@@ -447,14 +447,14 @@ export default class App extends Component {
                     <h5 style={{ display: 'inline' }}>
                         Query :
                 </h5>
-                    <Input style={{ width: '600px', marginLeft: '15px', display: 'inline' }} placeholder="Query example : SELECT * FROM Utente;" />
-                    < Button size="large" onClick={serversByLocation} style={{ display: 'inline', marginLeft: '7px' }}>
+                    <Input style={{ width: '600px', marginLeft: '15px', display: 'inline' }} placeholder="Query example : SELECT * FROM Utente;" onChange={this.handleTestQuery} />
+                    < Button size="large" onClick={this.testQuery} style={{ display: 'inline', marginLeft: '7px' }}>
                         Submit Query
                 </Button>
                     <br />
                     <br />
                     <TextArea style={{ width: '850px', height: '600px' }} placeholder="There will be the result of the query" value={this.state.result}>
-
+                        {this.state.result}
                     </TextArea>
                 </div>
 
