@@ -3,11 +3,11 @@
 
 -- create table Server
 CREATE TABLE Server (
-    ip VARCHAR(21) NOT NULL,
+    ip VARCHAR(16) NOT NULL,
     locazione VARCHAR(50) NOT NULL,
     tick int NOT NULL DEFAULT 128,
     primary key (ip)
-    ); 
+    )Engine = InnoDB;
 
 -- create table Utente
 CREATE TABLE Utente (
@@ -22,7 +22,7 @@ CREATE TABLE Utente (
     tfa Boolean NOT NULL DEFAULT 0,                                    
     steamid VARCHAR(50) NOT NULL,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
-    );  
+    )Engine = InnoDB;
 
 
 -- create table Statistiche
@@ -37,7 +37,7 @@ CREATE TABLE Statistiche (
     partite_vinte int NOT NULL,
     partite_perse int NOT NULL,
     winrate int NOT NULL
-); 
+)Engine = InnoDB;
 
 -- create table Sponsor
 CREATE TABLE Sponsor (
@@ -46,7 +46,7 @@ CREATE TABLE Sponsor (
     nazione VARCHAR(100) NOT NULL,
     ambito VARCHAR(100) NOT NULL,
     societa VARCHAR(100) NOT NULL
-);
+)Engine = InnoDB;
 
 -- create table Organizzatori
 CREATE TABLE Organizzatore (
@@ -58,7 +58,7 @@ CREATE TABLE Organizzatore (
     contatto VARCHAR(100) NOT NULL,
     verificato Boolean NOT NULL,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
-);
+)Engine = InnoDB;
 
 -- create table Gioco 
 CREATE TABLE Gioco (
@@ -66,7 +66,7 @@ CREATE TABLE Gioco (
     nome VARCHAR(100) NOT NULL,
     piattaforma VARCHAR(100) NOT NULL,
     abbreviazione VARCHAR(50) not null
-);
+)Engine = InnoDB;
 
 -- create table Mappa
 CREATE TABLE Mappa (
@@ -75,7 +75,7 @@ CREATE TABLE Mappa (
     numero_giocatori int NOT NULL,
     modalita VARCHAR(100) NOT NULL,
     FK_Gioco VARCHAR(100) not null references Gioco(id_gioco) on delete cascade
-);
+)Engine = InnoDB;
 
 -- create table Staff
 CREATE TABLE Staff (
@@ -83,17 +83,7 @@ CREATE TABLE Staff (
     ambito VARCHAR(100) NOT NULL,
     ruolo VARCHAR(100) NOT NULL,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente) ON DELETE CASCADE
-);
-
--- create table Missioni
-CREATE TABLE Missioni (
-    id_missione int PRIMARY KEY NOT NULL auto_increment,
-    nome VARCHAR(100) NOT NULL,
-    tipo VARCHAR(100) NOT NULL,
-    scopo VARCHAR(100) NOT NULL,
-    FK_Gioco VARCHAR(100) NOT NULL REFERENCES Gioco(nome),
-    FK_Premio int NOT NULL REFERENCES Oggetti(id_ogetto) ON DELETE CASCADE
-);
+)Engine = InnoDB;
 
 -- create table Squadra
 CREATE TABLE Squadra (
@@ -103,13 +93,14 @@ CREATE TABLE Squadra (
     FK_Leader int NOT NULL REFERENCES Utente(id_utente) ,
     FK_Manager int NOT NULL REFERENCES Utente(id_utente) ,
     FK_Statistiche int NOT NULL REFERENCES Statistiche(id_stat) ON DELETE CASCADE
-);
+)Engine = InnoDB;
 
 -- create table Componenti
 create table Componenti(
     FK_Utente int NOT NULL,
     FK_Squadra int NOT NULL,
-    primary key(FK_Utente,FK_Squadra));
+    primary key(FK_Utente,FK_Squadra))
+    Engine = InnoDB;
 
 
 -- create table Partita
@@ -121,7 +112,7 @@ CREATE TABLE Partita (
     FK_Squadra2 int NOT NULL REFERENCES Squadra(id_squadra) ,
     FK_Server varchar(21) NOT NULL REFERENCES Server(ip) ,
     FK_Mappa int NOT NULL REFERENCES Mappa(id_mappa) 
-);
+)Engine = InnoDB;
 
 -- create table Abbonamento
 CREATE TABLE Abbonamento (
@@ -129,7 +120,7 @@ CREATE TABLE Abbonamento (
     durata int NOT NULL,
     costo   real NOT NULL,
     tipo VARCHAR(100) NOT NULL
-    );
+    )Engine = InnoDB;
 
 -- create table Torneo 
 create table Torneo (
@@ -141,7 +132,7 @@ create table Torneo (
     FK_Organizzatore int NOT NULL REFERENCES Organizzatore(id_organizzatore) ,
     FK_Sponsor int NOT NULL REFERENCES Sponsor(id_sponsor) ,
     premio int default 0)
-    ;
+    Engine=InnoDB;
 
 -- create table Sottoscrizione
 create table Sottoscrizione (
@@ -150,14 +141,14 @@ create table Sottoscrizione (
     data_fine date not null,
     FK_Utente int NOT NULL REFERENCES Utente(id_utente),
     FK_Abbonamento int NOT NULL REFERENCES Abbonamento(id_abbonamento)
-    );
-
+    )Engine = InnoDB;
+innoCT
 -- create table Iscrizione
 create table Iscrizione(
     FK_Squadra int not null references Squadra(id_squadra) ,
     FK_Torneo int not null references Torneo(id_torneo),
     PRIMARY KEY (FK_Squadra,FK_Torneo)
-    );
+    )Engine = InnoDB;
 
 -- Games rows
 insert into Gioco (nome,abbreviazione,piattaforma) values 

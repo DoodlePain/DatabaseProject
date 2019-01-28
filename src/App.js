@@ -17,7 +17,8 @@ export default class App extends Component {
             NoRServer: 0,
             fk_stats: [],
             test: 'SELECT FROM ;',
-            current: 'query'
+            current: 'query',
+            status: false
         }
         this.testQuery = null
         this.serverAdded = []
@@ -50,6 +51,7 @@ export default class App extends Component {
         if (this.state.test !== nextState.test) return true
         if (this.state.result !== nextState.result) return true
         if (this.state.current !== nextState.current) return true
+        if (this.state.status !== nextState.status) return true
         return false
     }
 
@@ -79,7 +81,7 @@ export default class App extends Component {
 
         var repeatServer = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
-            var ip = Faker.internet.ip() + ":" + (Math.round(Math.random() * (3100 - 3000) + 3000))
+            var ip = Faker.internet.ip()
             axios.post('http://localhost:3001/Server/insert', querystring.stringify({
                 ip: ip,
                 locazione: Faker.address.country(),
@@ -92,8 +94,9 @@ export default class App extends Component {
         }
 
         var serverFiller = () => {
+            toggleStatus()
             repeatServer(0)
-
+            toggleStatus()
         }
 
 
@@ -131,7 +134,11 @@ export default class App extends Component {
                 )
             }
             this.setState({ fk_stats: ids })
+            toggleStatus()
+
             repeatUser(0, this.state.fk_stats)
+            toggleStatus()
+
         }
 
         var repeatStatistiche = (index) => {
@@ -172,7 +179,9 @@ export default class App extends Component {
         }
 
         var statisticheFiller = () => {
+            toggleStatus()
             repeatStatistiche(0)
+            toggleStatus()
         }
 
         var repeatSponsor = (index) => {
@@ -190,7 +199,9 @@ export default class App extends Component {
         }
 
         var sponsorFiller = () => {
+            toggleStatus()
             repeatSponsor(0)
+            toggleStatus()
         }
 
         var repeatOrganizzatori = (index) => {
@@ -211,7 +222,9 @@ export default class App extends Component {
         }
 
         var organizzatoriFiller = () => {
+            toggleStatus()
             repeatOrganizzatori(0)
+            toggleStatus()
         }
 
 
@@ -229,7 +242,9 @@ export default class App extends Component {
         }
 
         var staffFiller = () => {
+            toggleStatus()
             repeatStaff(0)
+            toggleStatus()
         }
 
         var repeatTorneo = (index) => {
@@ -251,7 +266,9 @@ export default class App extends Component {
         }
 
         var torneoFiller = () => {
+            toggleStatus()
             repeatTorneo(0)
+            toggleStatus()
         }
 
         var repeatSquadra = (index) => {
@@ -270,14 +287,16 @@ export default class App extends Component {
         }
 
         var squadraFiller = () => {
+            toggleStatus()
             repeatSquadra(0)
+            toggleStatus()
         }
 
         var repeatComponenti = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Componenti/insert', querystring.stringify({
-                utente: Math.floor(Math.random() * 17000) + 1,
-                FK_Squadra: Math.floor(Math.random() * 2000) + 1
+                utente: Math.floor(Math.random() * 239000) + 1,
+                FK_Squadra: Math.floor(Math.random() * 12061) + 1
             }))
                 .then((response) => {
                     index++
@@ -286,7 +305,9 @@ export default class App extends Component {
         }
 
         var componentiFiller = () => {
+            toggleStatus()
             repeatComponenti(0)
+            toggleStatus()
         }
 
         var repeatPartita = (index) => {
@@ -313,7 +334,9 @@ export default class App extends Component {
         }
 
         var partitaFiller = () => {
+            toggleStatus()
             repeatPartita(0)
+            toggleStatus()
         }
 
 
@@ -321,8 +344,8 @@ export default class App extends Component {
         var repeatIscrizione = (index) => {
             if (index === parseInt(this.state.limitServerRecords)) return 1
             axios.post('http://localhost:3001/Iscrizione/insert', querystring.stringify({
-                FK_Squadra: Math.floor(Math.random() * 100) + 1,
-                FK_Torneo: Math.floor(Math.random() * 150) + 300
+                FK_Squadra: Math.floor(Math.random() * 12061) + 1,
+                FK_Torneo: Math.floor(Math.random() * 1162) + 300
             }))
                 .then((response) => {
                     index++
@@ -331,7 +354,9 @@ export default class App extends Component {
         }
 
         var iscrizioneFiller = () => {
+            toggleStatus()
             repeatIscrizione(0)
+            toggleStatus()
         }
 
 
@@ -355,7 +380,9 @@ export default class App extends Component {
         }
 
         var missioneFiller = () => {
+            toggleStatus()
             repeatMissione(0)
+            toggleStatus()
         }
 
 
@@ -380,7 +407,9 @@ export default class App extends Component {
         }
 
         var sottoscrizioneFiller = () => {
+            toggleStatus()
             repeatSottoscrizione(0)
+            toggleStatus()
         }
 
 
@@ -420,6 +449,16 @@ export default class App extends Component {
                 current: e.key,
             });
         }
+
+        var toggleStatus = () => {
+            var status = this.state.status
+            status = !status
+            console.log(this.state.status, status);
+            this.setState({ status })
+            // console.log(this.state.status ? "Turned ON" : "Turned OFF");
+
+        }
+
 
 
         const { TextArea } = Input;
@@ -467,31 +506,33 @@ export default class App extends Component {
                 </h5>
                     <InputNumber defaultValue={1000} onChange={this.handleChangeNoRServer} />
                     <br />
+                    <h1>{this.state.status ? "Loading . . . " : ""}</h1>
                     <br />
                     <Row>
-                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Server</Button>
-                        < Button type="dashed" size="large" onClick={userFiller} style={bStyle}>Utente</Button>
-                        < Button type="dashed" size="large" onClick={statisticheFiller} style={bStyle}>Statistiche</Button>
-                        < Button type="dashed" size="large" onClick={sponsorFiller} style={bStyle}>Sponsor</Button>
+                        < Button type="dashed" size="large" onClick={componentiFiller} style={bStyle}>Componenti</Button>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Gioco</Button>
+                        < Button type="dashed" size="large" onClick={iscrizioneFiller} style={bStyle}>Iscrizione</Button>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Mappe</Button>
+
                     </Row>
                     <Row>
 
                         < Button type="dashed" size="large" onClick={organizzatoriFiller} style={bStyle}>Organizzatori</Button>
-                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Gioco</Button>
-                        < Button type="dashed" size="large" onClick={staffFiller} style={bStyle}>Staff</Button>
-                        < Button type="dashed" size="large" onClick={squadraFiller} style={bStyle}>Squadra</Button>
-
-                    </Row>
-                    <Row>
-                        < Button type="dashed" size="large" onClick={componentiFiller} style={bStyle}>Componenti</Button>
                         < Button type="dashed" size="large" onClick={partitaFiller} style={bStyle}>Partita</Button>
-                        < Button type="dashed" size="large" onClick={torneoFiller} style={bStyle}>Torneo</Button>
-                        < Button type="dashed" size="large" onClick={iscrizioneFiller} style={bStyle}>Iscrizione</Button>
+                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Server</Button>
+                        < Button type="dashed" size="large" onClick={sottoscrizioneFiller} style={bStyle}>Sottoscrizione</Button>
 
                     </Row>
                     <Row>
-                        < Button type="dashed" size="large" onClick={sottoscrizioneFiller} style={bStyle}>Sottoscrizione</Button>
-                        < Button type="dashed" size="large" onClick={serverFiller} style={bStyle}>Mappe</Button>
+                        < Button type="dashed" size="large" onClick={sponsorFiller} style={bStyle}>Sponsor</Button>
+                        < Button type="dashed" size="large" onClick={squadraFiller} style={bStyle}>Squadra</Button>
+                        < Button type="dashed" size="large" onClick={staffFiller} style={bStyle}>Staff</Button>
+                        < Button type="dashed" size="large" onClick={statisticheFiller} style={bStyle}>Statistiche</Button>
+
+                    </Row>
+                    <Row>
+                        < Button type="dashed" size="large" onClick={torneoFiller} style={bStyle}>Torneo</Button>
+                        < Button type="dashed" size="large" onClick={userFiller} style={bStyle}>Utente</Button>
                     </Row>
 
                 </div>
